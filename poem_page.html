@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Road Not Taken – Poem Magazine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Open Sans', sans-serif;
+      color: white;
+      background: linear-gradient(135deg, #1e293b, #334155, #0f172a);
+    }
+
+    /* Back Button */
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      color: #e0f2fe;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 1100;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    header {
+      text-align: center;
+      padding: 4rem 1rem 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      margin: 0;
+    }
+
+    header p {
+      margin-top: 1rem;
+      font-style: italic;
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+
+    .poem-section, .info-section {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      color: #f1f5f9;
+    }
+
+    .poem-section h2,
+    .info-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #e2e8f0;
+    }
+
+    .poem {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1rem 1.5rem;
+      border-left: 4px solid #818cf8;
+      font-style: italic;
+      white-space: pre-line;
+      margin: 1rem 0;
+      border-radius: 6px;
+      color: #f8fafc;
+    }
+
+    .image-container {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+    }
+
+    li {
+      margin-bottom: 0.75rem;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      margin-top: 4rem;
+    }
+
+    /* Overlay and Popup styles */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .popup {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 500px;
+      width: 90%;
+      color: #f1f5f9;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transform: translateY(-20px);
+      opacity: 0;
+      animation: slideIn 0.4s ease forwards;
+      position: relative;
+    }
+
+    .popup h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      margin-top: 0;
+    }
+
+    .popup .quote {
+      position: relative;
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-top: 2rem;
+      padding: 1.5rem 1.5rem 1.5rem 2.5rem;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.05));
+      border-left: 4px solid #60a5fa;
+      border-radius: 8px;
+      color: #e0f2fe;
+      box-shadow: inset 0 0 0.5px rgba(255, 255, 255, 0.1);
+    }
+
+    .popup .quote::before {
+      content: "“";
+      position: absolute;
+      top: 0.4rem;
+      left: 0.6rem;
+      font-size: 3rem;
+      color: #60a5fa;
+      opacity: 0.6;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .popup .quote::after {
+      content: " — Robert Frost (from Wikipedia)";
+      display: block;
+      text-align: right;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      margin-top: 0.5rem;
+      font-style: normal;
+      opacity: 0.7;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #f8fafc;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-20px); }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    a.author-link {
+      color: #93c5fd;
+      text-decoration: underline dotted;
+      cursor: pointer;
+    }
+
+    a.author-link:hover {
+      color: #60a5fa;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Back Button -->
+  <button class="back-button" onclick="history.back()">Back</button>
+
+  <header>
+    <h1>The Road Not Taken</h1>
+    <p>by Robert Frost — A Poetic Feature</p>
+  </header>
+
+  <div class="container">
+    <!-- Main Poem Section -->
+    <div class="poem-section">
+      <div class="image-container">
+        <!-- Optional Image -->
+      </div>
+
+      <h2>Poem</h2>
+      <div class="poem">
+        Two roads diverged in a yellow wood,<br>
+        And sorry I could not travel both<br>
+        And be one traveler, long I stood<br>
+        And looked down one as far as I could<br>
+        To where it bent in the undergrowth;<br><br>
+
+        Then took the other, as just as fair,<br>
+        And having perhaps the better claim,<br>
+        Because it was grassy and wanted wear;<br>
+        Though as for that the passing there<br>
+        Had worn them really about the same...<br><br>
+
+        And both that morning equally lay<br>
+        In leaves no step had trodden black.<br>
+        Oh, I kept the first for another day!<br>
+        Yet knowing how way leads on to way,<br>
+        I doubted if I should ever come back.<br><br>
+
+        I shall be telling this with a sigh<br>
+        Somewhere ages and ages hence:<br>
+        Two roads diverged in a wood, and I—<br>
+        I took the one less traveled by,<br>
+        And that has made all the difference.<br>
+      </div>
+    </div>
+
+    <!-- Sidebar Section -->
+    <div class="info-section">
+      <h2>About the Poet</h2>
+      <p><a class="author-link" onclick="openPopup()">Robert Frost</a> (1874–1963) was a four-time Pulitzer Prize-winning American poet, celebrated for his realistic portrayals of rural life and command of American colloquial speech. His poetry explores complex social and philosophical themes using natural imagery.</p>
+
+      <h2>Literary Devices</h2>
+      <ul>
+        <li><strong>Imagery:</strong> <em>“Two roads diverged in a yellow wood”</em></li>
+        <li><strong>Metaphor:</strong> <em>The two roads = life decisions</em></li>
+        <li><strong>Rhyme Scheme:</strong> <em>ABAAB</em></li>
+      </ul>
+
+      <h2>Theme & Message</h2>
+      <p><strong>Theme:</strong> Life decisions and the irreversible consequences of choices.</p>
+      <p><strong>Message:</strong> Even the smallest paths we choose can define the shape of our future.</p>
+    </div>
+  </div>
+
+  <!-- Popup Overlay -->
+  <div id="overlay" class="overlay" onclick="closePopup(event)">
+    <div id="popup" class="popup">
+      <button class="close-btn" onclick="closePopup(event)">×</button>
+      <h3>Robert Frost</h3>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert Frost was a prominent American poet known for his realistic portrayals of rural New England life and mastery of everyday American speech. His poetry explored deep social and philosophical themes through simple, rural settings. He received numerous honors, including four Pulitzer Prizes—the most by any poet—and was appointed U.S. Poet Laureate in 1958. He also received the Congressional Gold Medal and was named Vermont's poet laureate. Critic Randall Jarrell praised Frost as one of the greatest American poets of the 20th century, noting his deep understanding of ordinary people and his exceptional use of natural speech in verse.</p>
+      <div class="quote">
+        I took the one less traveled by, and that has made all the difference.
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Poem Magazine © 2025 — Literary Insight, Modern Design
+  </footer>
+
+  <script>
+    function openPopup() {
+      document.getElementById('overlay').style.display = 'flex';
+    }
+
+    function closePopup(event) {
+      if (event.target.id === 'overlay' || event.target.classList.contains('close-btn')) {
+        const popup = document.getElementById('popup');
+        popup.style.animation = 'slideOut 0.3s ease forwards';
+        setTimeout(() => {
+          document.getElementById('overlay').style.display = 'none';
+          popup.style.animation = 'slideIn 0.4s ease forwards';
+        }, 300);
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Poem Explorer – Magazine Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      font-family: 'Open Sans', sans-serif;
+      color: white;
+      background: linear-gradient(135deg, #1e293b, #334155, #0f172a);
+      background-size: 300% 300%;
+      animation: animatedGradient 12s ease-in-out infinite;
+      position: relative;
+    }
+
+    @keyframes animatedGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    header {
+      text-align: center;
+      padding: 5rem 1rem 2rem;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 0.3s;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      margin: 0;
+    }
+
+    header p {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      margin-top: 1rem;
+    }
+
+    .search-bar {
+      margin-top: 2.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: 0 1rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 0.6s;
+    }
+
+    .search-bar input,
+    .search-bar button {
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 1.25rem 1.5rem;
+      border-radius: 14px;
+      font-size: 1.25rem;
+      outline: none;
+    }
+
+    .search-bar input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .search-bar button {
+      padding: 1.25rem 2rem;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .search-bar button:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .results {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 0 1rem;
+      flex-grow: 1;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 1.5rem;
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeCard 0.6s ease forwards;
+    }
+
+    .card h2 {
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 0.5rem;
+      font-size: 1.4rem;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      margin-top: auto;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeCard {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Poem Explorer</h1>
+    <p>Discover poetry, analysis & inspiration in a magazine-style platform</p>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search poems or poets..." oninput="filterCards(this.value)">
+      <button onclick="filterCards(document.getElementById('searchInput').value)">Search</button>
+    </div>
+  </header>
+
+  <div class="results" id="results">
+    <a href="poem_page.html" class="card" style="animation-delay: 0.1s;">
+      <h2>The Road Not Taken</h2>
+      <p>by Robert Frost</p>
+    </a>
+  </div>
+
+  <footer>
+    Poem Explorer © 2025 – Created for poetry lovers around the world.
+  </footer>
+
+  <script>
+    function filterCards(query) {
+      const container = document.getElementById('results');
+      const cards = container.querySelectorAll('.card');
+      let hasMatch = false;
+
+      cards.forEach((card, i) => {
+        const text = card.innerText.toLowerCase();
+        const match = text.includes(query.toLowerCase());
+        if (match) {
+          card.style.display = '';
+          card.style.animation = `fadeCard 0.6s ease ${0.1 + i * 0.1}s forwards`;
+          hasMatch = true;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      container.style.display = query.trim() && hasMatch ? 'grid' : 'none';
+    }
+  </script>
+
+</body>
+</html>
