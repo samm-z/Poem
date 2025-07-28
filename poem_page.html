@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' stroke='%231e293b' fill='none' stroke-width='1.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8 3h10a1 1 0 011 1v13a3 3 0 01-3 3H6a1 1 0 01-1-1V5a2 2 0 012-2zM8 7h6M8 11h4' /%3E%3C/svg%3E" type="image/svg+xml" />
   <title>The Road Not Taken – Poem Magazine</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     html, body {
       margin: 0;
@@ -14,6 +14,50 @@
       color: white;
       background: linear-gradient(135deg, #1e293b, #334155, #0f172a);
       overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* Animated background elements */
+    .bg-decoration {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-decoration::before,
+    .bg-decoration::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(129, 140, 248, 0.1) 0%, transparent 70%);
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .bg-decoration::before {
+      width: 300px;
+      height: 300px;
+      top: 20%;
+      right: -150px;
+      animation-delay: -10s;
+    }
+
+    .bg-decoration::after {
+      width: 200px;
+      height: 200px;
+      bottom: 30%;
+      left: -100px;
+      animation-delay: -5s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33% { transform: translateY(-30px) rotate(120deg); }
+      66% { transform: translateY(20px) rotate(240deg); }
     }
 
     body.loaded header,
@@ -42,12 +86,15 @@
       border-radius: 8px;
       cursor: pointer;
       z-index: 1100;
-      transition: background 0.3s ease, transform 0.2s ease;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
     }
 
     .back-button:hover {
       background: rgba(255, 255, 255, 0.15);
       transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
     header {
@@ -56,12 +103,17 @@
       background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(255,255,255,0.1);
+      position: relative;
     }
 
     header h1 {
       font-family: 'Playfair Display', serif;
       font-size: 3rem;
       margin: 0;
+      background: linear-gradient(135deg, #f8fafc, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     header p {
@@ -69,6 +121,13 @@
       font-style: italic;
       font-size: 1.2rem;
       opacity: 0.9;
+    }
+
+    .publication-info {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #94a3b8;
+      font-weight: 300;
     }
 
     .container {
@@ -87,6 +146,13 @@
       padding: 2rem;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       color: #f1f5f9;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .poem-section:hover, .info-section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
     }
 
     .poem-section h2,
@@ -95,17 +161,80 @@
       font-size: 1.8rem;
       margin-bottom: 1rem;
       color: #e2e8f0;
+      position: relative;
+    }
+
+    .poem-section h2::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, #818cf8, #60a5fa);
+      border-radius: 1px;
     }
 
     .poem {
       background: rgba(255, 255, 255, 0.05);
-      padding: 1rem 1.5rem;
+      padding: 1.5rem 2rem;
       border-left: 4px solid #818cf8;
       font-style: italic;
       white-space: pre-line;
       margin: 1rem 0;
       border-radius: 6px;
       color: #f8fafc;
+      line-height: 1.8;
+      font-size: 1.05rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .poem::before {
+      content: '"';
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      font-size: 4rem;
+      color: rgba(129, 140, 248, 0.2);
+      font-family: 'Playfair Display', serif;
+      line-height: 1;
+    }
+
+    .stanza {
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .stanza:hover {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.5rem;
+      border-radius: 4px;
+      margin-left: 0.5rem;
+    }
+
+    .historical-context {
+      background: rgba(96, 165, 250, 0.1);
+      border: 1px solid rgba(96, 165, 250, 0.2);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .historical-context h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin: 0 0 0.5rem 0;
+      color: #93c5fd;
+    }
+
+    .quote-highlight {
+      background: linear-gradient(120deg, rgba(129, 140, 248, 0.2) 0%, rgba(96, 165, 250, 0.1) 100%);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-weight: 600;
     }
 
     ul {
@@ -114,7 +243,27 @@
 
     li {
       margin-bottom: 0.75rem;
-      line-height: 1.5;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    li::marker {
+      color: #818cf8;
+    }
+
+    .interpretation-section {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-left: 3px solid #60a5fa;
+    }
+
+    .interpretation-section h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      margin: 0 0 0.5rem 0;
+      color: #93c5fd;
     }
 
     footer {
@@ -123,6 +272,7 @@
       color: #cbd5e1;
       font-size: 0.9rem;
       margin-top: 4rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
     }
 
     .overlay {
@@ -144,20 +294,24 @@
       backdrop-filter: blur(16px);
       padding: 2rem;
       border-radius: 16px;
-      max-width: 500px;
+      max-width: 600px;
       width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
       color: #f1f5f9;
       box-shadow: 0 8px 32px rgba(0,0,0,0.4);
       transform: translateY(-20px);
       opacity: 0;
       animation: slideIn 0.4s ease forwards;
       position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
     .popup h3 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       margin-top: 0;
+      color: #e2e8f0;
     }
 
     .popup .quote {
@@ -175,7 +329,7 @@
     }
 
     .popup .quote::before {
-      content: "“";
+      content: """;
       position: absolute;
       top: 0.4rem;
       left: 0.6rem;
@@ -186,7 +340,7 @@
     }
 
     .popup .quote::after {
-      content: " — Robert Frost (from Wikipedia)";
+      content: " — Robert Frost";
       display: block;
       text-align: right;
       font-size: 0.9rem;
@@ -196,25 +350,58 @@
       opacity: 0.7;
     }
 
+    .popup .bio-section {
+      margin: 1.5rem 0;
+    }
+
+    .popup .bio-section h4 {
+      font-family: 'Playfair Display', serif;
+      color: #93c5fd;
+      margin-bottom: 0.5rem;
+    }
+
     .close-btn {
       position: absolute;
       top: 1rem;
       right: 1rem;
-      background: none;
-      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
       font-size: 1.2rem;
       color: #f8fafc;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(90deg);
     }
 
     a.author-link {
       color: #93c5fd;
       text-decoration: underline dotted;
       cursor: pointer;
+      transition: color 0.3s ease;
     }
 
     a.author-link:hover {
       color: #60a5fa;
+    }
+
+    .reading-time {
+      display: inline-block;
+      background: rgba(129, 140, 248, 0.2);
+      color: #c7d2fe;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
     }
 
     @media (max-width: 1024px) {
@@ -240,14 +427,16 @@
 
       .popup {
         padding: 1.2rem;
+        max-width: 95%;
       }
 
       .popup h3 {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
       }
 
       .popup .quote {
         font-size: 1rem;
+        padding: 1rem 1rem 1rem 2rem;
       }
 
       .poem-section h2, .info-section h2 {
@@ -256,6 +445,12 @@
 
       .poem {
         font-size: 0.95rem;
+        padding: 1rem 1.5rem;
+      }
+
+      .bg-decoration::before,
+      .bg-decoration::after {
+        display: none;
       }
     }
 
@@ -276,41 +471,49 @@
   </style>
 </head>
 <body>
+  <div class="bg-decoration"></div>
 
-  <button class="back-button" onclick="window.location.href='index.html'">Back</button>
+  <button class="back-button" onclick="window.location.href='index.html'">← Back</button>
 
   <header>
     <h1>The Road Not Taken</h1>
     <p>by Robert Frost — A Poetic Feature</p>
+    <div class="publication-info">First published in "Mountain Interval" (1916)</div>
+    <div class="reading-time">📖 3 min read</div>
   </header>
 
   <div class="container">
     <div class="poem-section">
       <h2>Poem</h2>
       <div class="poem">
-        Two roads diverged in a yellow wood,<br>
-        And sorry I could not travel both<br>
-        And be one traveler, long I stood<br>
-        And looked down one as far as I could<br>
-        To where it bent in the undergrowth;<br><br>
+        <div class="stanza">Two roads diverged in a yellow wood,
+And sorry I could not travel both
+And be one traveler, long I stood
+And looked down one as far as I could
+To where it bent in the undergrowth;</div>
 
-        Then took the other, as just as fair,<br>
-        And having perhaps the better claim,<br>
-        Because it was grassy and wanted wear;<br>
-        Though as for that the passing there<br>
-        Had worn them really about the same...<br><br>
+        <div class="stanza">Then took the other, as just as fair,
+And having perhaps the better claim,
+Because it was grassy and wanted wear;
+Though as for that the passing there
+Had worn them really about the same,</div>
 
-        And both that morning equally lay<br>
-        In leaves no step had trodden black.<br>
-        Oh, I kept the first for another day!<br>
-        Yet knowing how way leads on to way,<br>
-        I doubted if I should ever come back.<br><br>
+        <div class="stanza">And both that morning equally lay
+In leaves no step had trodden black.
+Oh, I kept the first for another day!
+Yet knowing how way leads on to way,
+I doubted if I should ever come back.</div>
 
-        I shall be telling this with a sigh<br>
-        Somewhere ages and ages hence:<br>
-        Two roads diverged in a wood, and I—<br>
-        I took the one less traveled by,<br>
-        And that has made all the difference.<br>
+        <div class="stanza">I shall be telling this with a sigh
+Somewhere ages and ages hence:
+Two roads diverged in a wood, and I—
+<span class="quote-highlight">I took the one less traveled by,
+And that has made all the difference.</span></div>
+      </div>
+
+      <div class="historical-context">
+        <h3>📜 Historical Context</h3>
+        <p>Written in 1915, this poem was inspired by Frost's walks with fellow poet Edward Thomas in the English countryside. Thomas would often regret not taking different paths during their walks, which sparked Frost's reflection on life's choices and their consequences.</p>
       </div>
     </div>
 
@@ -318,24 +521,59 @@
       <h2>About the Poet</h2>
       <p><a class="author-link" onclick="openPopup()">Robert Frost</a> (1874–1963) was a four-time Pulitzer Prize-winning American poet, celebrated for his realistic portrayals of rural life and command of American colloquial speech. His poetry explores complex social and philosophical themes using natural imagery.</p>
 
-      <h2>Literary Devices</h2>
+      <h2>Literary Analysis</h2>
       <ul>
-        <li><strong>Imagery:</strong> <em>“Two roads diverged in a yellow wood”</em></li>
-        <li><strong>Metaphor:</strong> <em>The two roads = life decisions</em></li>
-        <li><strong>Rhyme Scheme:</strong> <em>ABAAB</em></li>
+        <li><strong>Imagery:</strong> <em>"yellow wood," "grassy and wanted wear"</em></li>
+        <li><strong>Extended Metaphor:</strong> <em>The diverging roads represent life's choices</em></li>
+        <li><strong>Rhyme Scheme:</strong> <em>ABAAB (quintain stanzas)</em></li>
+        <li><strong>Meter:</strong> <em>Iambic tetrameter with variations</em></li>
+        <li><strong>Irony:</strong> <em>The speaker's future retelling may not be truthful</em></li>
       </ul>
 
+      <div class="interpretation-section">
+        <h3>🎭 Common Misinterpretation</h3>
+        <p>Often read as celebrating nonconformity, the poem actually explores the stories we tell ourselves about our choices. The “sigh” (line 16) suggests regret, wistfulness, or even ironic self‑reflection rather than proud satisfaction.</p>
+      </div>
+
       <h2>Theme & Message</h2>
-      <p><strong>Theme:</strong> Life decisions and the irreversible consequences of choices.</p>
-      <p><strong>Message:</strong> Even the smallest paths we choose can define the shape of our future.</p>
+      <p><strong>Central Theme:</strong> The nature of choice and the narratives we create about our decisions.</p>
+      <p><strong>Deeper Message:</strong> We often rationalize our choices retrospectively, creating meaning where there may have been little difference between options.</p>
+
+      <h2>Cultural Impact</h2>
+      <ul>
+        <li>Most quoted poems in American literature</li>
+        <li>Frequently referenced in graduation speeches and motivational talks</li>
+        <li>Adapted or referenced in countless songs, books, films, and TV episodes</li>
+        <li>Part of standard American literature curricula since the 1960s</li>
+      </ul>
     </div>
   </div>
 
   <div id="overlay" class="overlay" onclick="closePopup(event)">
     <div id="popup" class="popup">
       <button class="close-btn" onclick="closePopup(event)">×</button>
-      <h3>Robert Frost</h3>
-      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Robert Frost was a prominent American poet known for his realistic portrayals of rural New England life and mastery of everyday American speech. His poetry explored deep social and philosophical themes through simple, rural settings. He received numerous honors, including four Pulitzer Prizes—the most by any poet—and was appointed U.S. Poet Laureate in 1958. He also received the Congressional Gold Medal and was named Vermont's poet laureate. Critic Randall Jarrell praised Frost as one of the greatest American poets of the 20th century, noting his deep understanding of ordinary people and his exceptional use of natural speech in verse.</p>
+      <h3>Robert Lee Frost</h3>
+      
+      <div class="bio-section">
+        <h4>🏆 Literary Achievements</h4>
+        <p>Robert Frost remains one of America’s most celebrated poets, winning four Pulitzer Prizes for Poetry (1924, 1931, 1937, 1943). He was awarded the Congressional Gold Medal by an act of Congress in 1960 (Public Law 86‑747, passed Sept 13, 1960) and formally presented at a White House ceremony by President John F. Kennedy on March 26, 1962. He served as Consultant in Poetry to the U.S. Library of Congress in 1958–1959.</p>
+      </div>
+
+      <div class="bio-section">
+        <h4>🌲 New England Connection</h4>
+        <p>Though born in San Francisco in 1874, Frost became deeply identified with rural New England—especially Vermont and New Hampshire—where he spent much of his life and drew inspiration from the landscape.</p>
+      </div>
+
+      <div class="bio-section">
+        <h4>✍️ Writing Style</h4>
+        <p>Frost combined traditional verse forms with natural American speech rhythms. His “sound of sense” approach emphasized capturing everyday conversational cadences within formal poetic structure.</p>
+      </div>
+
+      <div class="bio-section">
+        <h4>🎓 Teaching Legacy</h4>
+        <p>He taught at Amherst College, Harvard University, Dartmouth College, University of Michigan, Yale University, and co‑founded the Bread Loaf School of English at Middlebury College, mentoring generations of poets and students.</p>
+      </div>
+
       <div class="quote">
         I took the one less traveled by, and that has made all the difference.
       </div>
@@ -343,12 +581,16 @@
   </div>
 
   <footer>
-    Poem Explorer © 2025 – Created for poetry lovers around the world.
+    <p>Poem Explorer © 2025 – Created for poetry lovers around the world.</p>
+    <p style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.7;">
+      "The Road Not Taken" remains in the public domain • Educational use encouraged
+    </p>
   </footer>
 
   <script>
     function openPopup() {
       document.getElementById('overlay').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
     }
 
     function closePopup(event) {
@@ -358,12 +600,35 @@
         setTimeout(() => {
           document.getElementById('overlay').style.display = 'none';
           popup.style.animation = 'slideIn 0.4s ease forwards';
+          document.body.style.overflow = 'auto';
         }, 300);
       }
     }
 
+    // Keyboard navigation
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        const overlay = document.getElementById('overlay');
+        if (overlay.style.display === 'flex') {
+          closePopup({ target: overlay });
+        }
+      }
+    });
+
+    // Smooth loading animation
     window.addEventListener('load', () => {
-      document.body.classList.add('loaded');
+      setTimeout(() => {
+        document.body.classList.add('loaded');
+      }, 100);
+    });
+
+    // Add subtle parallax effect to background decorations
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const decoration = document.querySelector('.bg-decoration');
+      if (decoration) {
+        decoration.style.transform = `translateY(${scrolled * 0.1}px)`;
+      }
     });
   </script>
 
