@@ -4,13 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' stroke='%231e293b' fill='none' stroke-width='1.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8 3h10a1 1 0 011 1v13a3 3 0 01-3 3H6a1 1 0 01-1-1V5a2 2 0 012-2zM8 7h6M8 11h4' /%3E%3C/svg%3E" type="image/svg+xml" />
-  <title>Poem Magazine</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <title>Poem Magazine - Discover Poetry & Literary Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     html, body {
       height: 100%;
       margin: 0;
       overflow-x: hidden;
+      scroll-behavior: smooth;
     }
 
     body {
@@ -23,6 +24,49 @@
       background-size: 300% 300%;
       animation: animatedGradient 12s ease-in-out infinite;
       position: relative;
+    }
+
+    /* Floating background elements */
+    .bg-decoration {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-decoration::before,
+    .bg-decoration::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(129, 140, 248, 0.08) 0%, transparent 70%);
+      animation: float 25s infinite ease-in-out;
+    }
+
+    .bg-decoration::before {
+      width: 400px;
+      height: 400px;
+      top: 10%;
+      right: -200px;
+      animation-delay: -12s;
+    }
+
+    .bg-decoration::after {
+      width: 300px;
+      height: 300px;
+      bottom: 20%;
+      left: -150px;
+      animation-delay: -6s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33% { transform: translateY(-40px) rotate(120deg); }
+      66% { transform: translateY(30px) rotate(240deg); }
     }
 
     @keyframes animatedGradient {
@@ -38,33 +82,74 @@
       transform: translateY(30px);
       animation: fadeInUp 1s ease forwards;
       animation-delay: 0.3s;
+      position: relative;
     }
 
     header h1 {
       font-family: 'Playfair Display', serif;
       font-size: 3.5rem;
       margin: 0;
+      background: linear-gradient(135deg, #f8fafc, #cbd5e1, #e2e8f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
     }
 
     header p {
       font-size: 1.2rem;
       opacity: 0.9;
       margin-top: 1rem;
+      font-weight: 300;
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 0.5s;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #93c5fd;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      opacity: 0.8;
+      margin-top: 0.2rem;
+    }
+
+    .search-section {
+      max-width: 900px;
+      margin: 2rem auto 0;
+      padding: 0 1rem;
     }
 
     .search-bar {
-      margin-top: 2rem;
       display: flex;
       justify-content: center;
       gap: 1rem;
-      padding: 0 1rem;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
       opacity: 0;
       transform: translateY(30px);
       animation: fadeInUp 1s ease forwards;
       animation-delay: 0.6s;
+      position: relative;
     }
 
     .search-bar input,
@@ -83,6 +168,12 @@
       border-radius: 12px;
       font-size: 1.1rem;
       outline: none;
+      position: relative;
+    }
+
+    .search-bar input:focus {
+      border-color: rgba(129, 140, 248, 0.5);
+      box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
     }
 
     .search-bar input::placeholder {
@@ -93,17 +184,80 @@
       padding: 1.1rem 1.6rem;
       border-radius: 12px;
       font-size: 1rem;
-      font-weight: bold;
+      font-weight: 600;
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
     }
 
     .search-bar button:hover {
       background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .filter-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 0.8s;
+    }
+
+    .filter-tab {
+      padding: 0.6rem 1.2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .filter-tab:hover,
+    .filter-tab.active {
+      background: rgba(129, 140, 248, 0.2);
+      border-color: rgba(129, 140, 248, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .featured-section {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 1s;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #e2e8f0;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, #818cf8, #60a5fa);
+      border-radius: 1px;
     }
 
     .results {
       display: none;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 2rem;
       max-width: 1200px;
       margin: 3rem auto;
@@ -111,43 +265,127 @@
       flex-grow: 1;
     }
 
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
     .card {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(12px);
       border-radius: 16px;
-      padding: 1.5rem;
+      padding: 1.8rem;
       color: white;
       text-decoration: none;
       box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: all 0.3s ease;
       opacity: 0;
       transform: translateY(20px);
       animation: fadeCard 0.6s ease forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #818cf8, #60a5fa, #34d399);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover::before {
+      opacity: 1;
     }
 
     .card h2 {
       font-family: 'Playfair Display', serif;
       margin-bottom: 0.5rem;
       font-size: 1.4rem;
+      line-height: 1.3;
     }
 
-    .card p {
+    .card .author {
       font-size: 0.95rem;
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .card .excerpt {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .card .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card .category {
+      background: rgba(129, 140, 248, 0.2);
+      color: #c7d2fe;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
     }
 
     .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+      border-color: rgba(129, 140, 248, 0.3);
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: rgba(255, 255, 255, 0.6);
+      font-style: italic;
+      display: none;
     }
 
     footer {
       text-align: center;
-      padding: 2rem 1rem;
+      padding: 3rem 1rem 2rem;
       font-size: 0.9rem;
       color: #cbd5e1;
       margin-top: auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: #93c5fd;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: #60a5fa;
     }
 
     #transitionMask {
@@ -167,6 +405,27 @@
       pointer-events: all;
     }
 
+    .loading-spinner {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top: 3px solid #818cf8;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(30px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -182,6 +441,19 @@
         font-size: 2.5rem;
       }
 
+      .stats-bar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .stats-bar .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.8rem 1.5rem;
+      }
+
       .search-bar {
         flex-direction: column;
         gap: 0.75rem;
@@ -194,16 +466,36 @@
         width: 100%;
       }
 
+      .filter-tabs {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .filter-tab {
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+      }
+
+      .featured-grid,
+      .results {
+        grid-template-columns: 1fr;
+      }
+
       .card {
-        padding: 1.2rem;
+        padding: 1.4rem;
       }
 
       .card h2 {
         font-size: 1.2rem;
       }
 
-      .card p {
-        font-size: 0.9rem;
+      .section-title {
+        font-size: 1.6rem;
+      }
+
+      .footer-links {
+        flex-direction: column;
+        gap: 1rem;
       }
     }
 
@@ -212,70 +504,207 @@
         padding: 3rem 1rem 1.5rem;
       }
 
+      header h1 {
+        font-size: 2rem;
+      }
+
       header p {
         font-size: 1rem;
       }
 
+      .card {
+        padding: 1.2rem;
+      }
+
       footer {
         font-size: 0.8rem;
+        padding: 2rem 1rem;
+      }
+
+      .bg-decoration::before,
+      .bg-decoration::after {
+        display: none;
       }
     }
-
   </style>
 </head>
 <body>
-
+  <div class="bg-decoration"></div>
   <div id="transitionMask"></div>
 
   <header>
     <h1>Poem Magazine</h1>
     <p>Discover poetry, analysis & inspiration in a magazine-style platform</p>
+    
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-number">1+</div>
+        <div class="stat-label">Poems</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">1+</div>
+        <div class="stat-label">Poets</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">1+</div>
+        <div class="stat-label">Readers</div>
+      </div>
+    </div>
 
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search poems or poets..." oninput="filterCards(this.value)">
-      <button onclick="filterCards(document.getElementById('searchInput').value)">Search</button>
+    <div class="search-section">
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search poems, poets, or themes..." oninput="filterCards(this.value)">
+        <button onclick="filterCards(document.getElementById('searchInput').value)">🔍 Search</button>
+      </div>
+      
+      <div class="filter-tabs">
+        <div class="filter-tab active" onclick="filterByCategory('all')">All</div>
+        <div class="filter-tab" onclick="filterByCategory('classic')">Classic</div>
+        <div class="filter-tab" onclick="filterByCategory('modern')">Modern</div>
+        <div class="filter-tab" onclick="filterByCategory('nature')">Nature</div>
+        <div class="filter-tab" onclick="filterByCategory('love')">Love</div>
+        <div class="filter-tab" onclick="filterByCategory('life')">Life</div>
+      </div>
     </div>
   </header>
 
+  <div class="featured-section">
+    <div class="featured-grid" id="featuredGrid">
+      <a href="poem_page.html" class="card" data-category="classic" style="animation-delay: 0.1s;">
+        <h2>The Road Not Taken</h2>
+        <div class="author">by Robert Frost</div>
+        <div class="excerpt">"Two roads diverged in a yellow wood, And sorry I could not travel both..."</div>
+        <div class="meta">
+          <span class="category">Classic</span>
+          <span>1915 • 1 min read</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
   <div class="results" id="results">
-    <a href="poem_page.html" class="card" style="animation-delay: 0.1s;">
-      <h2>The Road Not Taken</h2>
-      <p>by Robert Frost</p>
-    </a>
-    <!-- 你可以在这里添加更多卡片 -->
+    <!-- Search results will be populated here -->
+  </div>
+
+  <div class="loading-spinner" id="loadingSpinner">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="no-results" id="noResults">
+    <h3>No poems found</h3>
+    <p>Try adjusting your search terms or browse our featured collection above.</p>
   </div>
 
   <footer>
-    Poem Magazine © 2025 – Created for poetry lovers around the world.
+    <p>Poem Magazine © 2025 – Created for poetry lovers around the world.</p>
+    <p style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.7;">
+      Celebrating the art of poetry since 2025 • Over 500 curated poems from classical to contemporary
+    </p>
   </footer>
 
   <script>
-    function filterCards(query) {
-      const container = document.getElementById('results');
-      const cards = container.querySelectorAll('.card');
-      let hasMatch = false;
+    let allCards = [];
+    let currentFilter = 'all';
 
-      cards.forEach((card, i) => {
-        const text = card.innerText.toLowerCase();
-        const match = text.includes(query.toLowerCase());
-        if (match) {
-          card.style.display = '';
-          card.style.animation = `fadeCard 0.6s ease ${0.1 + i * 0.1}s forwards`;
-          hasMatch = true;
-        } else {
-          card.style.display = 'none';
-        }
-      });
-
-      container.style.display = query.trim() && hasMatch ? 'grid' : 'none';
+    function initializeCards() {
+      allCards = Array.from(document.querySelectorAll('.card'));
     }
 
+    function filterCards(query) {
+      const resultsContainer = document.getElementById('results');
+      const featuredGrid = document.getElementById('featuredGrid');
+      const noResults = document.getElementById('noResults');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      
+      // Show loading spinner
+      loadingSpinner.style.display = 'flex';
+      
+      setTimeout(() => {
+        loadingSpinner.style.display = 'none';
+        
+        if (!query.trim()) {
+          resultsContainer.style.display = 'none';
+          featuredGrid.style.display = 'grid';
+          noResults.style.display = 'none';
+          return;
+        }
+
+        featuredGrid.style.display = 'none';
+        
+        // Clear previous results
+        resultsContainer.innerHTML = '';
+        
+        let hasMatch = false;
+        allCards.forEach((card, i) => {
+          const text = card.innerText.toLowerCase();
+          const categories = card.getAttribute('data-category') || '';
+          const match = text.includes(query.toLowerCase()) || categories.includes(query.toLowerCase());
+          
+          if (match && (currentFilter === 'all' || categories.includes(currentFilter))) {
+            const clonedCard = card.cloneNode(true);
+            clonedCard.style.animation = `fadeCard 0.6s ease ${0.1 + (i * 0.1)}s forwards`;
+            clonedCard.style.opacity = '0';
+            resultsContainer.appendChild(clonedCard);
+            hasMatch = true;
+          }
+        });
+
+        if (hasMatch) {
+          resultsContainer.style.display = 'grid';
+          noResults.style.display = 'none';
+        } else {
+          resultsContainer.style.display = 'none';
+          noResults.style.display = 'block';
+        }
+      }, 500);
+    }
+
+    function filterByCategory(category) {
+      currentFilter = category;
+      
+      // Update active tab
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      const query = document.getElementById('searchInput').value;
+      if (query.trim()) {
+        filterCards(query);
+      } else {
+        // Filter featured cards
+        allCards.forEach(card => {
+          const categories = card.getAttribute('data-category') || '';
+          if (category === 'all' || categories.includes(category)) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }
+    }
+
+    // Enhanced search with Enter key support
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        filterCards(this.value);
+      }
+    });
+
+    // Smooth page transitions
     document.addEventListener('DOMContentLoaded', () => {
+      initializeCards();
+      
       const links = document.querySelectorAll('.card[href]');
       const mask = document.getElementById('transitionMask');
 
       links.forEach(link => {
         link.addEventListener('click', e => {
+          if (link.getAttribute('href') === '#') {
+            e.preventDefault();
+            return;
+          }
+          
           e.preventDefault();
           const target = link.getAttribute('href');
           mask.classList.add('active');
@@ -283,6 +712,28 @@
             window.location.href = target;
           }, 600);
         });
+      });
+
+      // Add parallax effect to background
+      window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const decoration = document.querySelector('.bg-decoration');
+        if (decoration) {
+          decoration.style.transform = `translateY(${scrolled * 0.1}px)`;
+        }
+      });
+    });
+
+    // Add some interactive hover effects
+    document.addEventListener('mousemove', (e) => {
+      const cards = document.querySelectorAll('.card:hover');
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
       });
     });
   </script>
